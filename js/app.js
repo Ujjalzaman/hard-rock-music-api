@@ -2,11 +2,19 @@ const searchBtn = document.getElementById("searchBtn");
 const inputValue = document.getElementById("inputValue");
 
 searchBtn.addEventListener('click', function() {
+    spinnerToggle()
     fetch(`https://api.lyrics.ovh/suggest/${inputValue.value}`)
         .then(res => res.json())
         .then(data => musicList(data.data))
-        .catch(erro => errorMessage("Something Went Wrong! Please Try Again Leter"))
+        .catch(erro =>errorMessage("Something Went Wrong !! Please Try Again Leter"))
 })
+
+//enter button
+inputValue.addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+      document.getElementById("searchBtn").click();
+    }
+  });
 const musicList = data =>{
     const songDiv = document.getElementById("songDiv");
     songDiv.innerHTML = "";
@@ -29,6 +37,7 @@ const musicList = data =>{
             </div>
         `
     })
+    spinnerToggle();
 }  
 
 const getLyrics = async(artist, title) =>{
@@ -47,4 +56,17 @@ const getLyrics = async(artist, title) =>{
 const errorMessage = (error) =>{
     const errorMessage = document.getElementById("errorMessage");
     errorMessage.innerText = error;
+}
+
+const spinnerToggle = () =>{
+    const spinner = document.getElementById("spinner");
+    const songs = document.getElementById("songDiv");
+    spinner.classList.toggle('d-none');
+    songs.classList.toggle('d-none');
+    // if(show){
+    //     spinner.classList.remove("d-none");
+    // }
+    // else{
+    //     spinner.classList.add("d-none");
+    // }
 }
